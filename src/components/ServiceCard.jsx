@@ -1,7 +1,7 @@
 function ServiceCard({ emoji, title, description }) {
   return (
-    <div>
-      <h3>{emoji}</h3>
+    <div className="card">
+      <h2>{emoji}</h2>
       <h3>{title}</h3>
       <p>{description}</p>
     </div>
