@@ -1,16 +1,48 @@
-# React + Vite
+# 🚗 Nocturne Garage
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+## Descripción
 
-Currently, two official plugins are available:
+Nocturne Garage es una aplicación web desarrollada como proyecto integrador utilizando React y Vite.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+El objetivo del proyecto es ofrecer una interfaz moderna para un taller especializado en personalización automotriz, permitiendo presentar los principales servicios ofrecidos por la empresa de una manera organizada y atractiva.
 
-## React Compiler
+## Problema que resuelve
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Muchos talleres automotrices no cuentan con una presencia digital que permita mostrar sus servicios de forma clara.
 
-## Expanding the Oxlint configuration
+Esta aplicación busca ofrecer una solución mediante una Single Page Application (SPA), donde los clientes pueden conocer los diferentes servicios disponibles en un solo lugar.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+## Servicios
+
+- Sistema Wig Wag
+- Instalación de Radios Multimedia
+- Instalación de Sombra Dinámica
+- Cámaras de Reversa
+- Exploradoras LED
+
+## Tecnologías utilizadas
+
+- React
+- Vite
+- JavaScript
+- JSX
+- CSS3
+- HTML5
+- NPM
+
+## Estructura del proyecto
+
+```text
+src/
+│
+├── assets/
+├── components/
+├── pages/
+├── App.jsx
+├── App.css
+└── main.jsx
+```
+
+## Autor
+
+Proyecto desarrollado por **Darwin Bedruwiz Ortiz Andrade** como actividad del Módulo 1: Fundamentos de SPA y React con Vite.

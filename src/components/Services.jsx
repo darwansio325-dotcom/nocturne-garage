@@ -4,7 +4,7 @@ function Services() {
   return (
     <section>
       <h2>Nuestros Servicios</h2>
-
+        <div className="cards">
       <ServiceCard
         emoji="🚨"
         title="Sistema Wig Wag"
@@ -34,6 +34,7 @@ function Services() {
         title="Exploradoras LED"
         description="Instalación de exploradoras LED para una mejor iluminación en carretera."
       />
+        </div>
     </section>
   );
 }

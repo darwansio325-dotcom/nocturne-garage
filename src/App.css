@@ -76,3 +76,75 @@ footer {
 .card:hover {
   border: 2px solid #8b0000;
 }
+.hero{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:40px;
+}
+
+.hero-text{
+    width:50%;
+}
+.hero-text h2{
+    font-size: 42px;
+    margin-bottom: 25px;
+    color: #b22222;
+}
+
+.hero-text h2{
+    font-size:42px;
+    margin-bottom:20px;
+}
+
+.hero-text p{
+    line-height:1.8;
+}
+
+.hero-image{
+    width:50%;
+}
+
+.hero-image img{
+    width:100%;
+    border-radius:12px;
+}
+.cards{
+    display:flex;
+    flex-wrap:wrap;
+    gap:20px;
+    margin-top:30px;
+}
+
+.card{
+    flex:1 1 300px;
+}
+.hero {
+  margin-bottom: 80px;
+}
+.cards {
+  margin-top: 30px;
+}
+
+.cards + * {
+  margin-top: 20px;
+}
+section h2 {
+  text-align: center;
+  margin-bottom: 30px;
+}
+.card {
+  transition: 0.3s;
+}
+
+.card:hover {
+  border: 2px solid #8b0000;
+  transform: translateY(-8px);
+}
+.hero-image img {
+  transition: 0.3s;
+}
+
+.hero-image img:hover {
+  transform: scale(1.03);
+}
