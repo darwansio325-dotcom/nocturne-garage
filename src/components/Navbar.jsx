@@ -1,35 +1,30 @@
-import { NavLink } from 'react-router-dom';
-import { useFavoritos } from '../context/FavoritosContext';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
-export const Navbar = () => {
-  const { favoritos } = useFavoritos();
+const Navbar = () => {
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
+
+  if (!user) return null; // Si no hay usuario logueado, no muestra la barra
+
+  const handleLogout = () => {
+    logout();
+    navigate('/');
+  };
 
   return (
-    <nav className="navbar">
-      <div className="navbar-brand">
-        <h2>Nocturne <span>Garage</span></h2>
+    <nav style={{ display: 'flex', justifyContent: 'space-between', padding: '1rem', background: '#1a1a1a', color: '#fff' }}>
+      <h2>🚗 Nocturne Garage</h2>
+      <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+        <Link to="/dashboard" style={{ color: '#fff', textDecoration: 'none' }}>Dashboard</Link>
+        <Link to="/catalogo" style={{ color: '#fff', textDecoration: 'none' }}>Catálogo</Link>
+        <span>Bienvenido, <strong>{user.email}</strong></span>
+        <button onClick={handleLogout} style={{ padding: '0.5rem 1rem', cursor: 'pointer' }}>
+          Cerrar Sesión
+        </button>
       </div>
-
-      <ul className="navbar-links">
-        <li>
-          <NavLink to="/" end className={({ isActive }) => (isActive ? 'active' : '')}>
-            Inicio
-          </NavLink>
-        </li>
-        <li>
-          <NavLink to="/catalogo" className={({ isActive }) => (isActive ? 'active' : '')}>
-            Servicios
-          </NavLink>
-        </li>
-        <li>
-          <NavLink to="/favoritos" className={({ isActive }) => (isActive ? 'active' : '')}>
-            Favoritos
-            {favoritos.length > 0 && (
-              <span className="fav-badge">{favoritos.length}</span>
-            )}
-          </NavLink>
-        </li>
-      </ul>
     </nav>
   );
 };
+
+export default Navbar;

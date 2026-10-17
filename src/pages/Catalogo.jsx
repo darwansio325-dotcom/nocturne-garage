@@ -1,128 +1,103 @@
-import { useState } from 'react';
-import { useFavoritos } from '../context/FavoritosContext';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 
-export const serviciosData = [
-  {
-    id: 1,
-    nombre: 'Reprogramación ECU Stg 1',
-    categoria: 'Rendimiento',
-    precio: '$350',
-    descripcion: 'Optimización de mapa de motor para aumentar potencia y torque.',
-    imagen: 'https://images.unsplash.com/photo-1617814076367-b759c7d7e738?auto=format&fit=crop&w=600&q=80',
-  },
-  {
-    id: 2,
-    nombre: 'Mantenimiento Carbocerámico',
-    categoria: 'Mantenimiento',
-    precio: '$200',
-    descripcion: 'Servicio especializado y revisión de discos y pastillas de alto desempeño.',
-    imagen: 'https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=600&q=80',
-  },
-  {
-    id: 3,
-    nombre: 'Suspensión Coilover',
-    categoria: 'Modificación',
-    precio: '$500',
-    descripcion: 'Ajuste de altura y dureza para mejor agarre en pista y calle.',
-    imagen: 'https://images.unsplash.com/photo-1511919884226-fd3cad34687c?auto=format&fit=crop&w=600&q=80',
-  },
-  {
-    id: 4,
-    nombre: 'Sistema de Escape Deportivo',
-    categoria: 'Rendimiento',
-    precio: '$450',
-    descripcion: 'Fabricación e instalación en acero inoxidable con alto flujo.',
-    imagen: 'https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?auto=format&fit=crop&w=600&q=80',
-  },
-  {
-    id: 5,
-    nombre: 'Instalación Kit de Turbo',
-    categoria: 'Rendimiento',
-    precio: '$1,200',
-    descripcion: 'Montaje de turbocargador, intercooler y tubería de presión.',
-    imagen: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=600&q=80',
-  },
-  {
-    id: 6,
-    nombre: 'Alineación y Balanceo Láser',
-    categoria: 'Mantenimiento',
-    precio: '$80',
-    descripcion: 'Ajuste de geometría de suspensión computarizada para alta velocidad.',
-    imagen: 'https://images.unsplash.com/photo-1578844251758-2f71da64c96f?auto=format&fit=crop&w=600&q=80',
-  },
-  {
-    id: 7,
-    nombre: 'Wrap Personalizado Vinilo',
-    categoria: 'Estética',
-    precio: '$850',
-    descripcion: 'Forrado completo en vinilo mate, brillante o satinado de alta calidad.',
-    imagen: 'https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?auto=format&fit=crop&w=600&q=80',
-  },
-  {
-    id: 8,
-    nombre: 'Tratamiento Cerámico de Pintura',
-    categoria: 'Estética',
-    precio: '$300',
-    descripcion: 'Protección de carrocería con sellado nanocerámico y acabado espejo.',
-    imagen: 'https://images.unsplash.com/photo-1520050206274-a1ae44613e6d?auto=format&fit=crop&w=600&q=80',
-  },
-  {
-    id: 9,
-    nombre: 'Servicio de Escáner y Diagnóstico',
-    categoria: 'Mantenimiento',
-    precio: '$60',
-    descripcion: 'Lectura de códigos de falla y diagnóstico integral de módulos electrónicos.',
-    imagen: 'https://images.unsplash.com/photo-1517524008697-84bbe3c3fd98?auto=format&fit=crop&w=600&q=80',
-  },
-];
+const Catalogo = () => {
+  const [productos, setProductos] = useState([]);
+  const [nombre, setNombre] = useState('');
+  const [precio, setPrecio] = useState('');
+  const [error, setError] = useState('');
 
-export const Catalogo = () => {
-  const [busqueda, setBusqueda] = useState('');
-  const { agregarFavorito, favoritos } = useFavoritos();
+  // Cargar productos al iniciar la vista (GET)
+  useEffect(() => {
+    cargarProductos();
+  }, []);
 
-  const serviciosFiltrados = serviciosData.filter((servicio) =>
-    servicio.nombre.toLowerCase().includes(busqueda.toLowerCase())
-  );
+  const cargarProductos = async () => {
+    try {
+      const response = await axios.get('http://localhost:5000/api/productos');
+      setProductos(response.data);
+      setError('');
+    } catch (err) {
+      console.error("Error al conectar con el backend:", err);
+      setError("No se pudo conectar con el servidor backend.");
+    }
+  };
+
+  // Crear un nuevo producto (POST)
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await axios.post('http://localhost:5000/api/productos', {
+        nombre,
+        precio: Number(precio)
+      });
+      setNombre('');
+      setPrecio('');
+      cargarProductos(); // Recargar la lista
+    } catch (err) {
+      console.error("Error al crear el producto:", err);
+    }
+  };
+
+  // Eliminar un producto (DELETE)
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(`http://localhost:5000/api/productos/${id}`);
+      cargarProductos();
+    } catch (err) {
+      console.error("Error al eliminar:", err);
+    }
+  };
 
   return (
-    <div>
-      <h2>Catálogo de Servicios</h2>
-      
-      <input
-        type="text"
-        placeholder="Buscar servicio..."
-        value={busqueda}
-        onChange={(e) => setBusqueda(e.target.value)}
-        className="input-search"
-      />
+    <div style={{ padding: '20px', maxWidth: '800px', margin: '0 auto', color: '#fff' }}>
+      <h1>Catálogo de Servicios / Repuestos</h1>
+      <p>Gestión conectada a MongoDB mediante Axios.</p>
 
-      <div className="grid-servicios">
-        {serviciosFiltrados.map((servicio) => {
-          const esFavorito = favoritos.some((fav) => fav.id === servicio.id);
-          return (
-            <div key={servicio.id} className="card-servicio">
-              <img
-                src={servicio.imagen}
-                alt={servicio.nombre}
-                className="img-servicio"
-              />
-              <div>
-                <h3>{servicio.nombre}</h3>
-                <p>Categoría: {servicio.categoria}</p>
-                <p>Precio: {servicio.precio}</p>
-                <p style={{ fontSize: '14px', color: '#aaa', marginTop: '8px' }}>{servicio.descripcion}</p>
-              </div>
-              <button
-                onClick={() => agregarFavorito(servicio)}
-                disabled={esFavorito}
-                className="btn-fav"
-              >
-                {esFavorito ? 'Agregado ❤️' : 'Agregar a Favoritos ♡'}
+      {error && <p style={{ color: 'orange', background: '#332200', padding: '10px' }}>{error}</p>}
+
+      {/* Formulario de Escritura (POST) */}
+      <form onSubmit={handleSubmit} style={{ margin: '20px 0', padding: '15px', border: '1px solid #444', borderRadius: '6px', background: '#1a1a1a' }}>
+        <h3>Agregar Nuevo Elemento</h3>
+        <div style={{ marginBottom: '10px', display: 'flex', gap: '10px' }}>
+          <input 
+            type="text" 
+            placeholder="Nombre del repuesto/servicio" 
+            value={nombre} 
+            onChange={(e) => setNombre(e.target.value)} 
+            style={{ padding: '8px', flex: 2 }}
+            required 
+          />
+          <input 
+            type="number" 
+            placeholder="Precio" 
+            value={precio} 
+            onChange={(e) => setPrecio(e.target.value)} 
+            style={{ padding: '8px', flex: 1 }}
+            required 
+          />
+          <button type="submit" style={{ padding: '8px 15px', background: '#28a745', color: '#fff', border: 'none', cursor: 'pointer', borderRadius: '4px' }}>
+            Guardar
+          </button>
+        </div>
+      </form>
+
+      {/* Lista de Lectura (GET) */}
+      <h3>Lista Actual en la Base de Datos</h3>
+      <ul style={{ listStyle: 'none', padding: 0 }}>
+        {productos.length === 0 ? (
+          <p>No hay elementos registrados todavía.</p>
+        ) : (
+          productos.map((prod) => (
+            <li key={prod._id} style={{ margin: '10px 0', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#222', padding: '12px', borderRadius: '4px' }}>
+              <span><strong>{prod.nombre}</strong> - ${prod.precio}</span>
+              <button onClick={() => handleDelete(prod._id)} style={{ background: '#dc3545', color: '#fff', border: 'none', padding: '6px 12px', cursor: 'pointer', borderRadius: '4px' }}>
+                Eliminar
               </button>
-            </div>
-          );
-        })}
-      </div>
+            </li>
+          ))
+        )}
+      </ul>
     </div>
   );
 };

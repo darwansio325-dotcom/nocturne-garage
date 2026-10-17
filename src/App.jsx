@@ -1,24 +1,28 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { FavoritosProvider } from './context/FavoritosContext';
-import { Layout } from './components/Layout';
-import { Home } from './pages/Home';
-import { Catalogo } from './pages/Catalogo';
-import { Favoritos } from './pages/Favoritos';
-import './App.css';
+import { AuthProvider } from './context/AuthContext';
+import { RutaProtegida } from './components/RutaProtegida';
+import Navbar from './components/Navbar';
+import Login from './pages/Login';
+import Dashboard from './pages/Dashboard';
+import Catalogo from './pages/Catalogo';
 
 function App() {
   return (
-    <FavoritosProvider>
+    <AuthProvider>
       <BrowserRouter>
+        <Navbar />
         <Routes>
-          <Route path="/" element={<Layout />}>
-            <Route index element={<Home />} />
-            <Route path="catalogo" element={<Catalogo />} />
-            <Route path="favoritos" element={<Favoritos />} />
+          {/* Ruta Pública */}
+          <Route path="/" element={<Login />} />
+
+          {/* Rutas Protegidas */}
+          <Route element={<RutaProtegida />}>
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/catalogo" element={<Catalogo />} />
           </Route>
         </Routes>
       </BrowserRouter>
-    </FavoritosProvider>
+    </AuthProvider>
   );
 }
 
